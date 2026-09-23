@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f3f4f0" />
+  <meta name="description" content="WING HAN GROUP Space Planning Studio — deterministic 2D office zoning and furniture planning." />
+  <title>WING HAN GROUP — Space Planning Studio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236f7855'/%3E%3Cpath d='M7 9v14h5l4-7 4 7h5V9' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">WH</div>
+        <div><strong>WING HAN GROUP</strong><span>SPACE PLANNING STUDIO</span></div>
+      </div>
+      <div class="project-meta">
+        <span class="status-dot"></span><span>Phase 2 concept zoning</span><span class="divider"></span><span>Southmark Tower A · 23F</span>
+      </div>
+      <button class="icon-button" aria-label="More options">•••</button>
+    </header>
+
+    <main class="workspace">
+      <section class="canvas-shell" aria-label="Planning canvas">
+        <div class="canvas-head">
+          <div><strong>Southmark Tower A</strong></div>
+        </div>
+        <div class="canvas-stage" id="canvasStage">
+          <svg id="planCanvas" class="plan-canvas" viewBox="590 35 1450 1780" role="img" aria-label="Southmark Tower A 23F source floor plan with traced editable Phase 2 and locked existing areas">
+            <defs>
+              <pattern id="minorGrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M 48 0 L 0 0 0 48" fill="none" stroke="#e9ebe6" stroke-width="1" /></pattern>
+            </defs>
+            <rect width="2647" height="1872" fill="#fbfcfa" />
+            <g id="planWorld">
+              <image id="sourcePlan" href="23f-plan.png" x="0" y="0" width="2647" height="1872" preserveAspectRatio="none" />
+              <g id="lockedLayer">
+                <path class="phase-two-outline" d="M670 100H1850L1973 215V670H1125V1190H1085V1740H670Z" />
+                <path class="locked-outline" d="M1125 670H1990V1140H1125Z" />
+                <path class="locked-outline phase-one-outline" d="M1085 1195H1990V1740H1085Z" />
+              </g>
+              <g id="zonesLayer"></g>
+              <g id="furnitureLayer"></g>
+              <g id="dimensionsLayer" pointer-events="none"></g>
+            </g>
+          </svg>
+          <div class="canvas-float" style="top:14px;right:14px"><button class="tool-chip" id="dimensionButton">Dimensions</button><select id="dimensionMode" aria-label="Dimension type"><option value="aligned">Aligned</option><option value="distance">Distance</option></select><button class="tool-chip" id="cancelDimensionButton" hidden>Cancel</button><button class="tool-chip" id="removeDimensionButton" hidden>Remove last</button></div>
+          <div class="canvas-float bottom-right"><button class="square-button" id="zoomOutButton" aria-label="Zoom out">−</button><span id="zoomReadout">100%</span><button class="square-button" id="zoomInButton" aria-label="Zoom in">+</button></div>
+        </div>
+      </section>
+
+      <aside class="right-panel">
+        <nav class="panel-tabs" aria-label="Planning panels">
+          <button class="panel-tab active" data-tab="zone">Zoning</button>
+        </nav>
+        <div id="panelContent" class="panel-content"></div>
+      </aside>
+    </main>
+
+    <footer class="bottom-bar">
+      <div aria-hidden="true"></div>
+      <div class="secondary-tools">
+        <div id="doorControls" class="footer-door-controls"></div>
+        <span class="tool-separator" aria-hidden="true"></span>
+        <button id="uploadButton">Upload plan</button>
+        <span class="tool-separator" aria-hidden="true"></span>
+        <span style="font-size:12px;color:#788071">Wheel to zoom · Right-drag to pan</span>
+        <span class="tool-separator" aria-hidden="true"></span>
+        <button id="exportPdfButton" class="export-button">Export PDF</button>
+      </div>
+    </footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input id="planUpload" type="file" accept="image/*" hidden />
+  <script src="app.js"></script>
+  <script src="room-editor.js"></script>
+  <script src="plan-doors.js"></script>
+</body>
+</html>
