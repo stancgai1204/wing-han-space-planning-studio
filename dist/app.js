@@ -138,7 +138,8 @@ document.addEventListener('click',evt=>{const b=evt.target.closest('button');if(
 $('#panelContent').addEventListener('change',evt=>{const t=evt.target;if(t.id==='projectName'){checkpoint();state.plan.projectName=t.value}if(t.id==='totalArea'){checkpoint();state.plan.totalArea=Math.max(1,+t.value);renderPanel()}if(t.id==='circulationInput'){checkpoint();state.plan.circulationPct=Math.max(0,Math.min(50,+t.value));renderPanel()}if(t.id==='selectedZoneName'){checkpoint();const z=state.zones.find(z=>z.id===state.selectedId);if(z)z.name=t.value.trim()||z.type;renderAll()}if(t.dataset.zoneName){checkpoint();state.zones.find(z=>z.id===t.dataset.zoneName).name=t.value;renderAll()}if(t.dataset.program){checkpoint();const r=state.programRequirements.find(r=>r.id===t.dataset.program);r[t.dataset.field]=t.type==='number'?+t.value:t.value;renderPanel()}});
 $('#planUpload').addEventListener('change',evt=>uploadPlan(evt.target.files[0]));
 $('#zoomInButton').onclick=()=>setZoom(.9);$('#zoomOutButton').onclick=()=>setZoom(1.1);
-$('#dimensionButton').onclick=()=>toggleDimensions(state.canvasTool!=='dimension');
+$('#dimensionAlignedButton').onclick=()=>activateDimensionMode('aligned');
+$('#dimensionDistanceButton').onclick=()=>activateDimensionMode('distance');
 $('#cancelDimensionButton').onclick=()=>toggleDimensions(false);
 $('#removeDimensionButton').onclick=()=>{if(state.dimensions.length){checkpoint();state.dimensions.pop();renderDimensions()}};
 $$('[data-mode]').forEach(b=>b.addEventListener('click',()=>{const mode=b.dataset.mode;$$('[data-mode]').forEach(x=>x.classList.toggle('active',x===b));if(['program','zone','furniture'].includes(mode))setTab(mode);if(mode==='zone')setCanvasTool('zone');if(mode==='circulation'){state.zoneType='Circulation';setTab('zone');setCanvasTool('zone')}if(mode==='compare')toast('Comparison view is reserved for the next planning version')}));
@@ -150,10 +151,12 @@ function registerWebMCP(){const context=document.modelContext;if(!context?.regis
 let dimensionStart=null;
 $('#dimensionMode').onchange=()=>{dimensionStart=null;toggleDimensions(true)};
 $('#exportPdfButton').onclick=exportPdf;
+function activateDimensionMode(mode){$('#dimensionMode').value=mode;dimensionStart=null;toggleDimensions(true)}
 function toggleDimensions(active){
  dimensionStart=null;
  setCanvasTool(active?'dimension':'select');
- $('#dimensionButton').classList.toggle('active',active);
+ $('#dimensionAlignedButton').classList.toggle('active',active&&$('#dimensionMode').value==='aligned');
+ $('#dimensionDistanceButton').classList.toggle('active',active&&$('#dimensionMode').value==='distance');
  $('#cancelDimensionButton').hidden=!active;$('#removeDimensionButton').hidden=!active;
  svg.style.cursor=active?'crosshair':'default';
  renderDimensions();

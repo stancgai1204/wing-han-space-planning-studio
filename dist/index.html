@@ -61,8 +61,10 @@
       <div aria-hidden="true"></div>
       <div class="secondary-tools">
         <div class="footer-dimension-controls">
-          <button class="tool-chip" id="dimensionButton">+ Dimension</button>
-          <select id="dimensionMode" aria-label="Dimension type"><option value="aligned">Aligned</option><option value="distance">Distance</option></select>
+          <span class="footer-group-label">Dimensions</span>
+          <button class="tool-chip" id="dimensionAlignedButton">Aligned</button>
+          <button class="tool-chip" id="dimensionDistanceButton">Distance</button>
+          <select id="dimensionMode" aria-label="Dimension type" hidden><option value="aligned">Aligned</option><option value="distance">Distance</option></select>
           <button class="tool-chip" id="cancelDimensionButton" hidden>Cancel</button>
           <button class="tool-chip" id="removeDimensionButton" hidden>Remove last</button>
         </div>
