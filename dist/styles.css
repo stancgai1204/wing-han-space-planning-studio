@@ -12,3 +12,23 @@
 #roomEditor[hidden]{display:none!important}
 #planCanvas .phase-two-outline{stroke-width:3.5!important}#planCanvas .locked-outline{stroke-width:2.5!important}#planCanvas .zone.selected polygon{stroke-width:3.5!important}#planCanvas .zone .resize-handle{stroke-width:2!important}#planCanvas .draw-preview{stroke-width:2.5!important}
 .footer-dimension-controls,.footer-door-controls{display:flex;align-items:center;gap:5px}.footer-group-label{color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}.footer-dimension-controls .tool-chip{height:38px}.footer-door-controls [data-door-action="add"]{color:var(--ink);font-weight:700}.footer-door-controls label{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:11px;white-space:nowrap}.footer-door-controls input{height:30px;border:1px solid var(--line);border-radius:6px;padding:4px 6px;color:var(--ink);background:#fff}.zone-palette .swatch{width:14px;height:14px;min-width:14px;border-radius:3px;margin-right:9px}.secondary-tools>.tool-separator{height:26px;margin-inline:7px;background:var(--line-dark)}
+
+/* Compact presentation chrome to give the planning canvas more height. */
+@media(min-width:901px){
+.app-shell{grid-template-rows:58px minmax(0,1fr) 52px}
+.topbar{padding-inline:20px}
+.brand-mark{width:36px;height:36px}
+.brand span{margin-top:3px;font-size:.7rem}
+.icon-button{width:36px;height:36px}
+.canvas-shell{padding:8px 12px 9px;grid-template-rows:28px minmax(0,1fr)}
+.canvas-head{padding-inline:3px}
+.canvas-head strong{font-size:.85rem;margin-top:0}
+.right-panel{grid-template-rows:50px minmax(0,1fr)}
+.panel-tab{height:36px}
+.panel-content{padding-top:12px}
+.panel-content>.panel-title+.panel-kicker{display:none}
+.bottom-bar{padding-inline:16px}
+.bottom-bar button{height:34px}
+.footer-dimension-controls .tool-chip{height:34px}
+#uploadButton{color:var(--ink);font-weight:700}
+}
