@@ -2,6 +2,10 @@
 
 A lightweight 2D conceptual zoning and furniture-planning prototype for the Southmark Tower A 23F office plan.
 
+## Live application
+
+<https://stancgai1204.github.io/wing-han-space-planning-studio/>
+
 ## Current prototype
 
 - Editable Phase 2 zoning blocks
