@@ -45,7 +45,6 @@
               <g id="dimensionsLayer" pointer-events="none"></g>
             </g>
           </svg>
-          <div class="canvas-float" style="top:14px;right:14px"><button class="tool-chip" id="dimensionButton">Dimensions</button><select id="dimensionMode" aria-label="Dimension type"><option value="aligned">Aligned</option><option value="distance">Distance</option></select><button class="tool-chip" id="cancelDimensionButton" hidden>Cancel</button><button class="tool-chip" id="removeDimensionButton" hidden>Remove last</button></div>
           <div class="canvas-float bottom-right"><button class="square-button" id="zoomOutButton" aria-label="Zoom out">−</button><span id="zoomReadout">100%</span><button class="square-button" id="zoomInButton" aria-label="Zoom in">+</button></div>
         </div>
       </section>
@@ -61,6 +60,13 @@
     <footer class="bottom-bar">
       <div aria-hidden="true"></div>
       <div class="secondary-tools">
+        <div class="footer-dimension-controls">
+          <button class="tool-chip" id="dimensionButton">+ Dimension</button>
+          <select id="dimensionMode" aria-label="Dimension type"><option value="aligned">Aligned</option><option value="distance">Distance</option></select>
+          <button class="tool-chip" id="cancelDimensionButton" hidden>Cancel</button>
+          <button class="tool-chip" id="removeDimensionButton" hidden>Remove last</button>
+        </div>
+        <span class="tool-separator" aria-hidden="true"></span>
         <div id="doorControls" class="footer-door-controls"></div>
         <span class="tool-separator" aria-hidden="true"></span>
         <button id="uploadButton">Upload plan</button>
