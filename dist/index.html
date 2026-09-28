@@ -49,6 +49,7 @@
                 <path class="locked-outline phase-one-outline" d="M1085 1195H1990V1740H1085Z" />
               </g>
               <g id="zonesLayer"></g>
+              <g id="wallsLayer"></g>
               <g id="furnitureLayer"></g>
               <g id="dimensionsLayer" pointer-events="none"></g>
             </g>
@@ -69,6 +70,9 @@
       <div aria-hidden="true"></div>
       <div class="secondary-tools">
         <div class="footer-dimension-controls">
+          <button class="dimension-eye active" id="dimensionVisibilityButton" type="button" aria-label="Hide dimensions" aria-pressed="true" title="Hide dimensions">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+          </button>
           <span class="footer-group-label">+ Dimension</span>
           <button class="tool-chip" id="dimensionAlignedButton">Aligned</button>
           <button class="tool-chip" id="dimensionDistanceButton">Distance</button>
@@ -77,20 +81,24 @@
           <button class="tool-chip" id="removeDimensionButton" hidden>Remove last</button>
         </div>
         <span class="tool-separator" aria-hidden="true"></span>
+        <div id="wallControls" class="footer-wall-controls"></div>
+        <span class="tool-separator" aria-hidden="true"></span>
         <div id="doorControls" class="footer-door-controls"></div>
         <span class="tool-separator" aria-hidden="true"></span>
         <button id="uploadButton">+ Upload plan</button>
         <span class="tool-separator" aria-hidden="true"></span>
         <span style="font-size:12px;color:#788071">Wheel to zoom · Right-drag to pan</span>
         <span class="tool-separator" aria-hidden="true"></span>
+        <button id="exportCadButton" class="export-button">Export CAD</button>
         <button id="exportPdfButton" class="export-button">Export PDF</button>
       </div>
     </footer>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <input id="planUpload" type="file" accept="image/*" hidden />
+  <script src="cad-export.js"></script>
   <script src="app.js"></script>
-  <script src="room-editor.js"></script>
+  <script src="walls.js"></script>
   <script src="plan-doors.js"></script>
 </body>
 </html>
