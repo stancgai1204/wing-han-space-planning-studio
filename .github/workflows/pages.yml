@@ -28,6 +28,12 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Stamp deployment version
+        shell: bash
+        run: |
+          sed -i "s/__BUILD_SHA__/${GITHUB_SHA}/g" dist/index.html
+          printf '{"version":"%s","deployedAt":"%s"}\n' "$GITHUB_SHA" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > dist/version.json
+
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
