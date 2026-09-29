@@ -161,7 +161,7 @@ function exportCad(){
 }
 function uploadPlan(file){if(!file||!file.type.startsWith('image/'))return toast('Please choose an image file');const reader=new FileReader();reader.onload=()=>{checkpoint();state.plan.background=reader.result;renderAll();toast('Image overlaid; 23F trace remains active')};reader.readAsDataURL(file)}
 let defaultLayoutIdeaImage=null,layoutIdeaImages=new Map(),referenceImages=[],activeIdeaRoom=null;
-let imageViewerItems=[],imageViewerIndex=0,imageViewerGroup='Image';
+let imageViewerItems=[],imageViewerIndex=0,imageViewerGroup='Image',imageViewerTouchStart=null;
 const ideaRoomKey=name=>String(name||'').trim().toLowerCase();
 function readInspirationImage(file){return new Promise((resolve,reject)=>{if(!file||!file.type.startsWith('image/'))return reject(new Error('Please choose an image file'));const reader=new FileReader();reader.onload=()=>resolve({name:file.name,src:reader.result});reader.onerror=()=>reject(new Error('Image could not be opened'));reader.readAsDataURL(file)})}
 const canSaveReferenceImages=()=>location.hostname==='127.0.0.1'||location.hostname==='localhost';
@@ -195,6 +195,8 @@ $('#imageViewerClose').onclick=closeImageViewer;
 $('#imageViewerPrev').onclick=()=>stepImageViewer(-1);
 $('#imageViewerNext').onclick=()=>stepImageViewer(1);
 $('#imageViewer').addEventListener('click',evt=>{if(evt.target===$('#imageViewer'))closeImageViewer()});
+$('#imageViewer').addEventListener('touchstart',evt=>{const touch=evt.changedTouches[0];imageViewerTouchStart=touch?{x:touch.clientX,y:touch.clientY}:null},{passive:true});
+$('#imageViewer').addEventListener('touchend',evt=>{if(!imageViewerTouchStart)return;const touch=evt.changedTouches[0];if(!touch)return;const dx=touch.clientX-imageViewerTouchStart.x,dy=touch.clientY-imageViewerTouchStart.y;imageViewerTouchStart=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.25)stepImageViewer(dx<0?1:-1)},{passive:true});
 $('#layoutIdeaUpload').addEventListener('change',async evt=>{const file=evt.target.files[0];evt.target.value='';if(!file)return;try{const image=await addInspirationImage(file,'layout');layoutIdeaImages.set(ideaRoomKey(activeIdeaRoom),image);renderInspirationRail();if(image.saved)setReferencePublishState(true,'Layout image saved locally — approval required to publish');toast(image.saved?`${activeIdeaRoom} layout plan saved locally`:`${activeIdeaRoom} layout preview added — open locally to save it`)}catch(error){toast(error.message||'Image could not be added')}});
 $('#referenceImageUpload').addEventListener('change',async evt=>{const files=[...evt.target.files].filter(file=>file.type.startsWith('image/'));evt.target.value='';if(!files.length)return toast('Please choose image files');try{const images=[];for(const file of files)images.push(await addInspirationImage(file,'reference'));referenceImages.push(...images.map(image=>({...image,category:activeIdeaRoom})));renderInspirationRail();const saved=images.every(image=>image.saved);if(saved)setReferencePublishState(true,'Reference images saved locally — approval required to publish');toast(saved?`${files.length} ${activeIdeaRoom} reference image${files.length===1?'':'s'} saved locally`:`${files.length} preview image${files.length===1?'':'s'} added — open locally to save`)}catch(error){toast(error.message||'Images could not be added')}});
 $('#zoomInButton').onclick=()=>setZoom(.9);$('#zoomOutButton').onclick=()=>setZoom(1.1);
