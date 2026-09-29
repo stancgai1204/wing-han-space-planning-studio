@@ -127,6 +127,16 @@
   <input id="planUpload" type="file" accept="image/*" hidden />
   <input id="layoutIdeaUpload" type="file" accept="image/*" hidden />
   <input id="referenceImageUpload" type="file" accept="image/*" multiple hidden />
+  <div class="image-viewer" id="imageViewer" role="dialog" aria-modal="true" aria-labelledby="imageViewerTitle" hidden>
+    <button class="image-viewer-close" id="imageViewerClose" type="button" aria-label="Close enlarged image">×</button>
+    <button class="image-viewer-nav image-viewer-prev" id="imageViewerPrev" type="button" aria-label="Previous image">‹</button>
+    <figure class="image-viewer-figure">
+      <img id="imageViewerImage" alt="" />
+      <figcaption><strong id="imageViewerTitle">Image preview</strong><span id="imageViewerCount"></span></figcaption>
+    </figure>
+    <button class="image-viewer-nav image-viewer-next" id="imageViewerNext" type="button" aria-label="Next image">›</button>
+    <div class="image-viewer-help">Use ← and → to change image · Esc to close</div>
+  </div>
   <script src="cad-export.js?v=__BUILD_SHA__"></script>
   <script src="app.js?v=__BUILD_SHA__"></script>
   <script src="walls.js?v=__BUILD_SHA__"></script>
