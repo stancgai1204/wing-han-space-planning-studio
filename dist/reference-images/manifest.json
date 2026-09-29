@@ -3,30 +3,35 @@
   "layoutIdeas": [
     {
       "room": "Karaoke",
-      "file": "karaoke/01-layout-plan/karaoke-layout-01.jpg",
-      "title": "1a584a8c26ec9b1eed2c7f3d540caa49"
+      "file": "karaoke/01-layout-plan/001.jpg",
+      "title": "001"
     }
   ],
   "references": [
     {
       "room": "Karaoke",
       "file": "karaoke/02-idea-image/001.jpg",
-      "title": "Karaoke idea 001"
+      "title": "001"
     },
     {
       "room": "Karaoke",
       "file": "karaoke/02-idea-image/002.jpg",
-      "title": "Karaoke idea 002"
+      "title": "002"
     },
     {
       "room": "Karaoke",
       "file": "karaoke/02-idea-image/003.jpg",
-      "title": "Karaoke idea 003"
+      "title": "003"
     },
     {
       "room": "Karaoke",
       "file": "karaoke/02-idea-image/004.jpg",
-      "title": "Karaoke idea 004"
+      "title": "004"
+    },
+    {
+      "room": "Karaoke",
+      "file": "karaoke/02-idea-image/005.jpg",
+      "title": "005"
     }
   ]
 }
