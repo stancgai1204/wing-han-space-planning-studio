@@ -5,9 +5,11 @@ const PX_PER_METRE = 46.846067317194816;
 const AREA_SCALE = 1 / (PX_PER_METRE * PX_PER_METRE);
 const PHASE_TWO_BOUNDARY = [[670,100],[1850,100],[1973,215],[1973,670],[1125,670],[1125,1190],[1085,1190],[1085,1740],[670,1740]];
 const PHASE_ONE_BOUNDARY = [[1085,1195],[1990,1195],[1990,1740],[1085,1740]];
+const PHASE_ONE_CORE_BOUNDARY = [[1125,670],[1990,670],[1990,1140],[1125,1140]];
 const ZONING_BOUNDARIES = [
   {id:'phase-2',label:'Phase 2',points:PHASE_TWO_BOUNDARY},
-  {id:'phase-1',label:'Phase 1 reference',points:PHASE_ONE_BOUNDARY}
+  {id:'phase-1',label:'Phase 1 reference',points:PHASE_ONE_BOUNDARY},
+  {id:'phase-1',label:'Phase 1 core reference',points:PHASE_ONE_CORE_BOUNDARY}
 ];
 const STRUCTURAL_COLUMNS = [
   {x:670,y:100,w:38,h:44},{x:1251,y:100,w:58,h:97},{x:1715,y:100,w:58,h:97},
@@ -53,7 +55,7 @@ const initialZones=[
 let nextId=20;
 const state={
   plan:{projectName:'Southmark Tower A · 23F',totalArea:521,circulationPct:22,background:null,boundary:PHASE_TWO_BOUNDARY,calibrationPxPerMetre:PX_PER_METRE,areaProvisional:true,viewBox:{...FIT_VIEW}},
-  lockedAreas:[{id:'phase-1',name:'Phase 1 existing fit-out · reference zoning enabled',type:'existing',polygon:PHASE_ONE_BOUNDARY},{id:'core',name:'Building core',type:'core',polygon:[[1125,670],[1990,670],[1990,1140],[1125,1140]]}],
+  lockedAreas:[{id:'phase-1',name:'Phase 1 existing fit-out · reference zoning enabled',type:'existing',polygon:PHASE_ONE_BOUNDARY},{id:'core',name:'Building core · Phase 1 reference zoning enabled',type:'core',polygon:PHASE_ONE_CORE_BOUNDARY}],
   programRequirements:programSpecs.map((r,i)=>({id:`p${i}`,name:r[0],quantity:r[1],target:r[2],priority:r[3],status:'New'})),
   zones:initialZones.map((z,i)=>({id:`z${i}`,name:z[0],type:z[0],x:z[1],y:z[2],w:z[3],h:z[4],color:zoneTypes.find(t=>t[0]===z[0])[1]})),
   furniture:[],dimensions:[],walls:[],
