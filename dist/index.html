@@ -36,7 +36,7 @@
           <div><strong>Southmark Tower A</strong></div>
         </div>
         <div class="canvas-stage" id="canvasStage">
-          <svg id="planCanvas" class="plan-canvas" viewBox="590 35 1450 1780" role="img" aria-label="Southmark Tower A 23F source floor plan with traced editable Phase 2 and locked existing areas">
+          <svg id="planCanvas" class="plan-canvas" viewBox="590 35 1450 1780" role="img" aria-label="Southmark Tower A 23F source floor plan with editable Phase 2 zoning and Phase 1 reference zoning">
             <defs>
               <pattern id="minorGrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M 48 0 L 0 0 0 48" fill="none" stroke="#e9ebe6" stroke-width="1" /></pattern>
             </defs>
@@ -51,12 +51,33 @@
               <g id="zonesLayer"></g>
               <g id="wallsLayer"></g>
               <g id="furnitureLayer"></g>
-              <g id="dimensionsLayer" pointer-events="none"></g>
+              <g id="dimensionsLayer"></g>
             </g>
           </svg>
           <div class="canvas-float bottom-right"><button class="square-button" id="zoomOutButton" aria-label="Zoom out">−</button><span id="zoomReadout">100%</span><button class="square-button" id="zoomInButton" aria-label="Zoom in">+</button></div>
         </div>
       </section>
+
+      <aside class="idea-rail" id="ideaRail" aria-label="Layout ideas and reference images" hidden>
+        <section class="idea-section idea-primary">
+          <div class="idea-section-head">
+            <div><span id="ideaRoomLabel">Selected room</span><strong>Layout Plan Idea</strong></div>
+            <div class="idea-head-actions"><button id="layoutIdeaUploadButton" type="button">+ Upload</button><button id="ideaRailClose" class="idea-close" type="button" aria-label="Close plan and ideas">×</button></div>
+          </div>
+          <div class="idea-layout-slot" id="layoutIdeaSlot">
+            <div class="idea-placeholder"><span>＋</span><strong>Add an idea layout plan</strong><small>JPG, PNG or WebP</small></div>
+          </div>
+        </section>
+        <section class="idea-section reference-section">
+          <div class="idea-section-head">
+            <div><span>Inspiration</span><strong id="referenceRoomLabel">Reference Images</strong></div>
+            <button id="referenceUploadButton" type="button">+ Add</button>
+          </div>
+          <div class="reference-gallery" id="referenceGallery">
+            <div class="reference-empty"><span>＋</span><strong>Add reference images</strong><small>The gallery scrolls when more images are added.</small></div>
+          </div>
+        </section>
+      </aside>
 
       <aside class="right-panel">
         <nav class="panel-tabs" aria-label="Planning panels">
@@ -78,7 +99,7 @@
           <button class="tool-chip" id="dimensionDistanceButton">Distance</button>
           <select id="dimensionMode" aria-label="Dimension type" hidden><option value="aligned">Aligned</option><option value="distance">Distance</option></select>
           <button class="tool-chip" id="cancelDimensionButton" hidden>Cancel</button>
-          <button class="tool-chip" id="removeDimensionButton" hidden>Remove last</button>
+          <button class="tool-chip dimension-delete" id="removeDimensionButton" aria-label="Delete selected dimension" title="Delete selected dimension" disabled>−</button>
         </div>
         <span class="tool-separator" aria-hidden="true"></span>
         <div id="wallControls" class="footer-wall-controls"></div>
@@ -96,6 +117,8 @@
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <input id="planUpload" type="file" accept="image/*" hidden />
+  <input id="layoutIdeaUpload" type="file" accept="image/*" hidden />
+  <input id="referenceImageUpload" type="file" accept="image/*" multiple hidden />
   <script src="cad-export.js"></script>
   <script src="app.js"></script>
   <script src="walls.js"></script>

@@ -36,16 +36,17 @@
  function solid(triangle,color){const [a,b,c]=triangle;return pair(0,'SOLID')+pair(8,'ZONING-FILL')+pair(62,color)+pair(10,number(a.x))+pair(20,number(a.y))+pair(30,0)+pair(11,number(b.x))+pair(21,number(b.y))+pair(31,0)+pair(12,number(c.x))+pair(22,number(c.y))+pair(32,0)+pair(13,number(c.x))+pair(23,number(c.y))+pair(33,0);}
  function polyline(layer,points,color,closed=true,width=0){return pair(0,'POLYLINE')+pair(8,layer)+pair(62,color)+pair(66,1)+pair(70,closed?1:0)+pair(10,0)+pair(20,0)+pair(30,0)+points.map(point=>pair(0,'VERTEX')+pair(8,layer)+pair(10,number(point.x))+pair(20,number(point.y))+pair(30,0)+(width?pair(40,number(width))+pair(41,number(width)):'')).join('')+pair(0,'SEQEND')+pair(8,layer);}
  function text(layer,value,x,y,height,color){return pair(0,'TEXT')+pair(8,layer)+pair(62,color)+pair(10,number(x))+pair(20,number(y))+pair(30,0)+pair(40,number(height))+pair(1,safe(value))+pair(50,0)+pair(41,1)+pair(7,'STANDARD')+pair(72,1)+pair(11,number(x))+pair(21,number(y))+pair(31,0)+pair(73,2);}
- function buildColorZoningDxf({boundary,zones,walls=[],pxPerMetre}){
-  if(!Array.isArray(boundary)||boundary.length<3||!Array.isArray(zones)||!Number.isFinite(pxPerMetre)||pxPerMetre<=0)throw new Error('Invalid CAD export geometry');
-  const originX=Math.min(...boundary.map(point=>point.x)),originY=Math.max(...boundary.map(point=>point.y));
+ function buildColorZoningDxf({boundary,boundaries,zones,walls=[],pxPerMetre}){
+  const zoningLimits=Array.isArray(boundaries)&&boundaries.length?boundaries:(Array.isArray(boundary)?[boundary]:[]);
+  if(!zoningLimits.length||zoningLimits.some(limit=>!Array.isArray(limit)||limit.length<3)||!Array.isArray(zones)||!Number.isFinite(pxPerMetre)||pxPerMetre<=0)throw new Error('Invalid CAD export geometry');
+  const limitPoints=zoningLimits.flat(),originX=Math.min(...limitPoints.map(point=>point.x)),originY=Math.max(...limitPoints.map(point=>point.y));
   const cadPoint=point=>({x:(point.x-originX)/pxPerMetre*1000,y:(originY-point.y)/pxPerMetre*1000});
-  const cadBoundary=boundary.map(cadPoint),cadZones=zones.map(zone=>({...zone,points:zone.points.map(cadPoint)})),cadWalls=walls.map(wall=>({...wall,points:wall.points.map(cadPoint)}));
-  const allPoints=[...cadBoundary,...cadZones.flatMap(zone=>zone.points),...cadWalls.flatMap(wall=>wall.points)],maxX=Math.max(...allPoints.map(point=>point.x)),maxY=Math.max(...allPoints.map(point=>point.y));
+  const cadBoundaries=zoningLimits.map(limit=>limit.map(cadPoint)),cadZones=zones.map(zone=>({...zone,points:zone.points.map(cadPoint)})),cadWalls=walls.map(wall=>({...wall,points:wall.points.map(cadPoint)}));
+  const allPoints=[...cadBoundaries.flat(),...cadZones.flatMap(zone=>zone.points),...cadWalls.flatMap(wall=>wall.points)],maxX=Math.max(...allPoints.map(point=>point.x)),maxY=Math.max(...allPoints.map(point=>point.y));
   let dxf=pair(0,'SECTION')+pair(2,'HEADER')+pair(9,'$ACADVER')+pair(1,'AC1009')+pair(9,'$MEASUREMENT')+pair(70,1)+pair(9,'$EXTMIN')+pair(10,0)+pair(20,0)+pair(30,0)+pair(9,'$EXTMAX')+pair(10,number(maxX))+pair(20,number(maxY))+pair(30,0)+pair(0,'ENDSEC')+pair(0,'SECTION')+pair(2,'ENTITIES');
   for(const zone of cadZones){const color=aci(zone.color);for(const triangle of triangulate(zone.points))dxf+=solid(triangle,color)}
-  dxf+=polyline('ZONING-LIMIT',cadBoundary,83);
-  for(const zone of cadZones){if(zone.points.length<3)continue;const xs=zone.points.map(point=>point.x),ys=zone.points.map(point=>point.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,width=Math.max(...xs)-Math.min(...xs),height=Math.max(115,Math.min(250,width/11));dxf+=polyline('ZONING-BOUNDARY',zone.points,82)+text('ZONING-TEXT',String(zone.name).toUpperCase(),cx,cy+height*.7,height,253)+text('ZONING-TEXT',`${zone.area} m2 NET`,cx,cy-height*.7,height*.72,253)}
+  for(const cadBoundary of cadBoundaries)dxf+=polyline('ZONING-LIMIT',cadBoundary,83);
+  for(const zone of cadZones){if(zone.points.length<3)continue;dxf+=polyline('ZONING-BOUNDARY',zone.points,82);if(zone.showLabel===false)continue;const xs=zone.points.map(point=>point.x),ys=zone.points.map(point=>point.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,width=Math.max(...xs)-Math.min(...xs),height=Math.max(115,Math.min(250,width/11));dxf+=text('ZONING-TEXT',String(zone.name).toUpperCase(),cx,cy+height*.7,height,253)+text('ZONING-TEXT',`${zone.area} m2 NET`,cx,cy-height*.7,height*.72,253)}
   for(const wall of cadWalls)if(wall.points.length>1)dxf+=polyline('WALL-100MM',wall.points,7,false,100);
   return dxf+pair(0,'ENDSEC')+pair(0,'EOF');
  }
