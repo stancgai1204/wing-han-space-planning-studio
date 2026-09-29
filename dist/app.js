@@ -41,13 +41,13 @@ const initialZones=[
  ['Gym',670,100,456,200],['Golf Sim',1126,100,180,200],
  ['Dining Area',1306,100,408,200],['Kitchen',1714,100,259,285.36],
  ['Store Room 01',1818.41,385.36,154.59,108.17],['Karaoke',1818.41,493.53,154.59,176.47],
- ['Gym',670,300,196,87.2],['Putting Green',994,300,312,300],
- ['Family Office 06',670,387.2,196,175.7],['Family Office 05',670,562.9,196,183.4],
- ['Family Office 03',670,746.3,196,226.1],
+ ['Gym',670,300,196,87.31],['Putting Green',994,300,312,300],
+ ['Family Office 06',670,387.31,196,175.81],['Family Office 05',670,563.12,196,183.4],
+ ['Family Office 03',670,746.52,196,226.1],
  ['Showers + Washrooms',994,670,132,300],
  ['Leisure Seating',1370,365,360,148.25],['Foyer Display',1522,552,108,48],
  ['Leisure Seating',758,1015,108,89.4],
- ['Family Office 04',670,1134,196,202.6],['Family Office 01',670,1336.6,196,211.4],
+ ['Family Office 02',670,1134,196,202.6],['Family Office 01',670,1336.6,196,211.74],
  ['Conference Room',670,1548,415,192]
 ];
 let nextId=20;
