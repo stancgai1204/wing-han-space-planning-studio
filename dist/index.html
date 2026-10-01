@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="app-version" content="__BUILD_SHA__" />
-  <meta name="theme-color" content="#f3f4f0" />
+  <meta name="theme-color" content="#F5F2EA" />
   <meta name="description" content="WING HAN GROUP Space Planning Studio — deterministic 2D office zoning and furniture planning." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="WING HAN GROUP" />
@@ -19,6 +19,21 @@
   <link rel="stylesheet" href="styles.css?v=__BUILD_SHA__" />
 </head>
 <body>
+  <section class="entry-screen" id="entryScreen" aria-labelledby="entryTitle">
+    <div class="entry-wallpaper is-active" id="entryWallpaperA" aria-hidden="true"></div>
+    <div class="entry-wallpaper" id="entryWallpaperB" aria-hidden="true"></div>
+    <header class="entry-header">
+      <div class="entry-mark" aria-label="Wing Han">WH</div>
+      <button class="entry-menu" id="entryMenu" type="button">Menu</button>
+    </header>
+    <main class="entry-hero">
+      <div class="entry-copy">
+        <h1 id="entryTitle">A Cozy<br />Family Office</h1>
+        <p>Plan spaces that feel<br />comfortable, calm and considered.</p>
+        <button class="entry-explore" id="entryExplore" type="button">Explore <span aria-hidden="true">→</span></button>
+      </div>
+    </main>
+  </section>
   <div class="app-shell">
     <header class="topbar">
       <div class="brand">
@@ -26,9 +41,15 @@
         <div><strong>WING HAN GROUP</strong><span>SPACE PLANNING STUDIO</span></div>
       </div>
       <div class="project-meta">
-        <span class="status-dot"></span><span>Phase 2 concept zoning</span><span class="divider"></span><span>Southmark Tower A · 23F</span>
+        <span>Projects</span><span class="breadcrumb-slash">/</span><span>Southmark Tower A</span><span class="breadcrumb-slash">/</span><strong>Phase 2 Concept Zoning</strong><span class="breadcrumb-slash">/</span><strong>23F</strong>
       </div>
-      <button class="icon-button" aria-label="More options">•••</button>
+      <div class="topbar-actions">
+        <button class="icon-button history-button" id="undoButton" aria-label="Undo" title="Undo">↶</button>
+        <button class="icon-button history-button" id="redoButton" aria-label="Redo" title="Redo">↷</button>
+        <span class="saved-state"><span>✓</span> Saved</span>
+        <button class="share-button" id="shareButton" type="button">Share</button>
+        <button class="icon-button" aria-label="More options">•••</button>
+      </div>
     </header>
 
     <main class="workspace">
@@ -59,16 +80,19 @@
         </div>
       </section>
 
-      <aside class="idea-rail" id="ideaRail" aria-label="Layout ideas and reference images" hidden>
-        <section class="idea-section idea-primary">
-          <div class="idea-section-head">
-            <div><span id="ideaRoomLabel">Selected room</span><strong>Layout Plan Idea</strong></div>
-            <div class="idea-head-actions"><button id="layoutIdeaUploadButton" type="button">+ Upload</button><button id="ideaRailClose" class="idea-close" type="button" aria-label="Close plan and ideas">×</button></div>
-          </div>
+      <aside class="idea-rail simple-idea-rail" id="ideaRail" aria-label="Design ideas" hidden>
+        <header class="simple-idea-head">
+          <div><strong>Design References</strong><span id="ideaRoomLabel">Selected room</span></div>
+          <div class="idea-head-actions"><button id="layoutIdeaUploadButton" type="button">+ Add</button><button id="ideaRailClose" class="idea-close" type="button" aria-label="Close design ideas">×</button></div>
+        </header>
+        <div class="design-idea-grid">
           <div class="idea-layout-slot" id="layoutIdeaSlot">
-            <div class="idea-placeholder"><span>＋</span><strong>Add an idea layout plan</strong><small>JPG, PNG or WebP</small></div>
+            <div class="idea-placeholder"><span>＋</span><strong>Add layout idea</strong><small>JPG, PNG or WebP</small></div>
           </div>
-        </section>
+          <div class="reference-gallery" id="referenceGallery">
+            <div class="reference-empty"><span>＋</span><strong>Add reference images</strong><small>Build the room idea board.</small></div>
+          </div>
+        </div>
         <div class="idea-sync-toolbar" id="ideaSyncToolbar" hidden>
           <div class="idea-sync-actions">
             <button id="checkReferenceFolderButton" type="button">C1 · Check Folder</button>
@@ -76,15 +100,8 @@
           </div>
           <small id="referenceSyncStatus">No unpublished image changes</small>
         </div>
-        <section class="idea-section reference-section">
-          <div class="idea-section-head">
-            <div><span>Inspiration</span><strong id="referenceRoomLabel">Reference Images</strong></div>
-            <button id="referenceUploadButton" type="button">+ Add</button>
-          </div>
-          <div class="reference-gallery" id="referenceGallery">
-            <div class="reference-empty"><span>＋</span><strong>Add reference images</strong><small>The gallery scrolls when more images are added.</small></div>
-          </div>
-        </section>
+        <button id="referenceUploadButton" class="simple-reference-add" type="button">+ Add reference</button>
+        <span id="referenceRoomLabel" hidden>Reference Images</span>
       </aside>
 
       <aside class="right-panel">
@@ -141,6 +158,43 @@
   <script src="app.js?v=__BUILD_SHA__"></script>
   <script src="walls.js?v=__BUILD_SHA__"></script>
   <script src="plan-doors.js?v=__BUILD_SHA__"></script>
+  <script src="karaoke-analysis.js?v=__BUILD_SHA__"></script>
   <script src="update-check.js?v=__BUILD_SHA__"></script>
+  <script>
+    (()=>{
+      const entry=document.getElementById('entryScreen');
+      const wallpapers=[document.getElementById('entryWallpaperA'),document.getElementById('entryWallpaperB')];
+      let images=[],imageIndex=0,activeWallpaper=0,rotationTimer=null,imageSignature='';
+      const showImage=(url,immediate=false)=>{
+        const next=immediate?activeWallpaper:1-activeWallpaper;
+        const image=new Image();
+        image.onload=()=>{
+          wallpapers[next].style.backgroundImage=`url("${url}")`;
+          if(!immediate){wallpapers[next].classList.add('is-active');wallpapers[activeWallpaper].classList.remove('is-active');activeWallpaper=next}
+        };
+        image.src=url;
+      };
+      const startRotation=()=>{
+        clearInterval(rotationTimer);
+        if(images.length<2)return;
+        rotationTimer=setInterval(()=>{imageIndex=(imageIndex+1)%images.length;showImage(`${images[imageIndex]}?v=${Date.now()}`)},8000);
+      };
+      const scanLandingImages=async()=>{
+        try{
+          let response=await fetch(`/api/landing-images?v=${Date.now()}`,{cache:'no-store'});
+          if(!response.ok)response=await fetch(`landing-images/manifest.json?v=${Date.now()}`,{cache:'no-store'});
+          if(!response.ok)return;
+          const result=await response.json(),next=Array.isArray(result.images)?result.images:[],signature=next.join('|');
+          if(!next.length||signature===imageSignature)return;
+          images=next;imageSignature=signature;imageIndex=0;showImage(`${images[0]}?v=${Date.now()}`,!wallpapers[activeWallpaper].style.backgroundImage);startRotation();
+        }catch{}
+      };
+      const enter=()=>{entry.classList.add('is-leaving');setTimeout(()=>{entry.hidden=true;document.body.classList.add('planner-entered')},420)};
+      document.getElementById('entryExplore').addEventListener('click',enter);
+      document.getElementById('entryMenu').addEventListener('click',enter);
+      scanLandingImages();
+      setInterval(scanLandingImages,5000);
+    })();
+  </script>
 </body>
 </html>

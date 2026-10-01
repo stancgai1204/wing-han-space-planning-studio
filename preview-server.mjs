@@ -6,8 +6,11 @@ import { promisify } from 'node:util';
 
 const root = join(process.cwd(), 'dist');
 const referenceRoot = join(root, 'reference-images');
+const landingRoot = join(root, 'landing-images');
+const landingManifestPath = join(landingRoot, 'manifest.json');
 const manifestPath = join(referenceRoot, 'manifest.json');
 const projectRoot = process.cwd();
+const localLandingSourceRoot = '/Users/stancore/Desktop/winghan Design/Reference image/landing page';
 const localReferenceSourceRoot = 'C:\\Users\\stanl\\Desktop\\_Winghan Group Design Studio\\01 Reference image';
 const run = promisify(execFile);
 const mime = {
@@ -117,6 +120,22 @@ async function imageFiles(folder) {
   } catch {
     return [];
   }
+}
+
+async function landingImages() {
+  const sourceFiles = await imageFiles(localLandingSourceRoot);
+  await mkdir(landingRoot, { recursive: true });
+  for (const filename of sourceFiles) {
+    const safeName = basename(filename);
+    await copyWhenChanged(join(localLandingSourceRoot, safeName), join(landingRoot, safeName));
+  }
+  const files = await imageFiles(landingRoot);
+  const manifest = { images: files.map(file => `landing-images/${encodeURIComponent(file)}`) };
+  let current = '';
+  try { current = await readFile(landingManifestPath, 'utf8'); } catch {}
+  const next = `${JSON.stringify(manifest, null, 2)}\n`;
+  if (current !== next) await writeFile(landingManifestPath, next, 'utf8');
+  return manifest;
 }
 
 async function copyWhenChanged(source, destination) {
@@ -258,6 +277,10 @@ createServer(async (req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   if (pathname === '/api/reference-images' && req.method === 'POST') {
     await saveReferenceImage(req, res);
+    return;
+  }
+  if (pathname === '/api/landing-images' && req.method === 'GET') {
+    sendJson(res, 200, await landingImages());
     return;
   }
   if (pathname === '/api/reference-folder/check' && req.method === 'POST') {

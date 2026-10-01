@@ -32,6 +32,26 @@
       "room": "Karaoke",
       "file": "karaoke/02-idea-image/005.jpg",
       "title": "005"
+    },
+    {
+      "room": "Karaoke",
+      "file": "karaoke/02-idea-image/karaoke-reference-01.jpg",
+      "title": "51e25d5c86f826b1a58f420d49448f30"
+    },
+    {
+      "room": "Karaoke",
+      "file": "karaoke/02-idea-image/karaoke-reference-02.jpg",
+      "title": "d41c704825b34d69121727d88b0e4bed"
+    },
+    {
+      "room": "Karaoke",
+      "file": "karaoke/02-idea-image/karaoke-reference-03.jpg",
+      "title": "de1e776baa2970d87bc951bad064f571"
+    },
+    {
+      "room": "Karaoke",
+      "file": "karaoke/02-idea-image/karaoke-reference-04.jpg",
+      "title": "f98cf3c9aa6953f773995f8e90a938ba"
     }
   ]
 }
